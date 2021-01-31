@@ -1,12 +1,21 @@
-import sys
-import os
-import time
 import tkinter as tk
 
-# Creates window
-gui = tk.Tk()
-gui.title('Thirst')
-gui.geometry('1920x1080')
-gui.configure(bg='#222222')
 
-gui.mainloop()
+class Game(tk.Frame):
+    def __init__(self, master):
+        super(Game, self).__init__(master)
+        self.lives = 3
+        self.width = 610
+        self.height = 400
+        self.canvas = tk.Canvas(self, bg='#dddddd',
+                                width=self.width,
+                                height=self.height)
+        self.canvas.pack()
+        self.pack()
+
+
+if __name__ == '__main__':
+    root = tk.Tk()
+    root.title('Hello, Pong!')
+    game = Game(root)
+    game.mainloop()

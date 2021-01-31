@@ -9,5 +9,5 @@ class enemyex(enemy):
         self.max_health = 100
         self.health = 100
 
-    def attack(self, ent):
-        return None
+    def attack(self, ent, damage):
+        ent.health_change(damage)

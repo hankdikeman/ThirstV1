@@ -39,5 +39,3 @@ class entity(ABC):
         self.health += delta
         if self.health <= 0:
             del self
-        else:
-            self.health -= self.health % self.max_health
