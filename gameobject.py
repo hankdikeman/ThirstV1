@@ -18,8 +18,14 @@ class GameObject(object):
 
 
 class Player(GameObject):
+    MOTION = {'left': [-1, 0],
+              'right': [1, 0],
+              'up': [0, -1],
+              'down': [0, 1]
+              }
+
     def __init__(self, canvas, x, y):
-        self.radius = 10
+        self.radius = 20
         self.direction = [1, 0]
         item = canvas.create_oval(x - self.radius * 0.5, y - self.radius * 1.5,
                                   x + self.radius * 0.5, y + self.radius * 1.5,
@@ -27,8 +33,10 @@ class Player(GameObject):
         super(Player, self).__init__(canvas, item)
 
     # direction is a tuple of x and y direction of movement
-    def move(self, offset, direction):
-        print('player movement')
+    def move(self, offset, angle):
+        print('player movement ' + angle)
+        # parse direction from keyword
+        direction = self.MOTION[angle]
         # get coordinates and window info
         coords = self.get_position()
         width = self.canvas.winfo_width()

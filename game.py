@@ -20,14 +20,19 @@ class Game(tk.Frame):
             self.width / 2), int(self.height / 2))
         self.items[self.player.item] = self.player
         # key bindings for movement
-        self.canvas.bind('<W>',
-                         lambda _: self.player.move(10, [-1, 0]))
-        self.canvas.bind('<A>',
-                         lambda _: self.player.move(10, [1, 0]))
-        self.canvas.bind('<S>',
-                         lambda _: self.player.move(10, [0, -1]))
-        self.canvas.bind('<D>',
-                         lambda _: self.player.move(10, [0, 1]))
+        self.canvas.focus_set()
+        # up
+        self.canvas.bind('<w>',
+                         lambda _: self.player.move(20, 'up'))
+        # left
+        self.canvas.bind('<a>',
+                         lambda _: self.player.move(20, 'left'))
+        # down
+        self.canvas.bind('<s>',
+                         lambda _: self.player.move(20, 'down'))
+        # right
+        self.canvas.bind('<d>',
+                         lambda _: self.player.move(20, 'right'))
         print('screen initialized')
 
     def game_intro(self):
