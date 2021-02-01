@@ -1,14 +1,18 @@
 class GameObject(object):
+    # initialize item and place within canvas
     def __init__(self, canvas, item):
         self.canvas = canvas
         self.item = item
 
+    # get position (boundaries) of item on canvas
     def get_position(self):
         return self.canvas.coords(self.item)
 
+    # move object on canvas
     def move(self, x, y):
         self.canvas.move(self.item, x, y)
 
+    # delete item
     def delete(self):
         self.canvas.delete(self.item)
 
@@ -17,12 +21,15 @@ class Player(GameObject):
     def __init__(self, canvas, x, y):
         self.radius = 10
         self.direction = [1, 0]
-        item = canvas.create_oval(x - self.radius, y - self.radius,
-                                  x + self.radius, y + self.radius,
+        item = canvas.create_oval(x - self.radius * 0.5, y - self.radius * 1.5,
+                                  x + self.radius * 0.5, y + self.radius * 1.5,
                                   fill='green')
         super(Player, self).__init__(canvas, item)
 
+    # direction is a tuple of x and y direction of movement
     def move(self, offset, direction):
+        print('player movement')
+        # get coordinates and window info
         coords = self.get_position()
         width = self.canvas.winfo_width()
         height = self.canvas.winfo_height()
