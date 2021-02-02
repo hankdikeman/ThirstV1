@@ -23,16 +23,16 @@ class Game(tk.Frame):
         self.canvas.focus_set()
         # up
         self.canvas.bind('<w>',
-                         lambda _: self.player.move(20, 'up'))
+                         lambda _: self.player.move(30, 'up'))
         # left
         self.canvas.bind('<a>',
-                         lambda _: self.player.move(20, 'left'))
+                         lambda _: self.player.move(30, 'left'))
         # down
         self.canvas.bind('<s>',
-                         lambda _: self.player.move(20, 'down'))
+                         lambda _: self.player.move(30, 'down'))
         # right
         self.canvas.bind('<d>',
-                         lambda _: self.player.move(20, 'right'))
+                         lambda _: self.player.move(30, 'right'))
         print('screen initialized')
 
     def game_intro(self):
