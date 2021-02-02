@@ -51,14 +51,18 @@ class Entity(GameObject):
                 motion[1] = distance * y_dir
         # set new direction
         self.direction = self.MOTION[angle]
+        print(self.direction)
         # move in allowed direction by distance
-        super(Entity, self).move(motion[0], motion[1])
+        super(Entity, self).move(*motion)
 
 
 class Player(Entity):
     def __init__(self, canvas, x, y):
+        # set size of player
         self.radius = 20
+        # set initial direction
         self.direction = [1, 0]
+        # generate new player and store on canvas
         item = canvas.create_oval(x - self.radius * 0.5, y - self.radius * 1.5,
                                   x + self.radius * 0.5, y + self.radius * 1.5,
                                   fill='green')

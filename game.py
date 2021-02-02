@@ -40,3 +40,7 @@ class Game(tk.Frame):
 
     def start_game(self):
         self.game_intro()
+        self.game_loop()
+
+    def game_loop():
+        pass
