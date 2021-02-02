@@ -56,6 +56,26 @@ class Entity(GameObject):
         super(Entity, self).move(*motion)
 
 
+# generic enemy class
+class Enemy(Entity):
+    pass
+
+
+# example enemy class for beetle
+class Beetle(Enemy):
+    def __init__(self, canvas, x, y):
+        # set size of player
+        self.radius = 20
+        # set initial direction
+        self.direction = [1, 0]
+        # generate new player and store on canvas
+        item = canvas.create_oval(x - self.radius * 1, y - self.radius * 1,
+                                  x + self.radius * 1, y + self.radius * 1,
+                                  fill='red')
+        super(Player, self).__init__(canvas, item)
+
+
+# core player-character class
 class Player(Entity):
     def __init__(self, canvas, x, y):
         # set size of player
