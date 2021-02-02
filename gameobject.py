@@ -17,40 +17,73 @@ class GameObject(object):
         self.canvas.delete(self.item)
 
 
-class Player(GameObject):
+class Entity(GameObject):
     MOTION = {'left': [-1, 0],
               'right': [1, 0],
               'up': [0, -1],
               'down': [0, 1]
               }
 
+    # direction is a tuple of x and y direction of movement
+    def move(self, distance, angle):
+        print('object movement ' + angle)
+        # parse direction from keyword
+        x_dir, y_dir = self.MOTION[angle]
+        # get coordinates and window info
+        print(self.get_position())
+        l_obj, t_obj, r_obj, b_obj = self.get_position()
+        width = self.canvas.winfo_width()
+        height = self.canvas.winfo_height()
+        motion = [0, 0]
+        # calculate if left-right move is possible
+        if angle == 'left':
+            if l_obj - distance >= 0:
+                motion[0] = distance * x_dir
+        if angle == 'right':
+            if r_obj + distance <= width:
+                motion[0] = distance * x_dir
+        # calculate if up-down move is possible
+        if angle == 'up':
+            if t_obj - distance >= 0:
+                motion[1] = distance * y_dir
+        if angle == 'down':
+            if b_obj + distance <= height:
+                motion[1] = distance * y_dir
+        # set new direction
+        self.direction = self.MOTION[angle]
+        print(self.direction)
+        # move in allowed direction by distance
+        super(Entity, self).move(*motion)
+
+
+# generic enemy class
+class Enemy(Entity):
+    pass
+
+
+# example enemy class for beetle
+class Beetle(Enemy):
     def __init__(self, canvas, x, y):
+        # set size of player
         self.radius = 20
+        # set initial direction
         self.direction = [1, 0]
+        # generate new player and store on canvas
+        item = canvas.create_oval(x - self.radius * 1, y - self.radius * 1,
+                                  x + self.radius * 1, y + self.radius * 1,
+                                  fill='red')
+        super(Player, self).__init__(canvas, item)
+
+
+# core player-character class
+class Player(Entity):
+    def __init__(self, canvas, x, y):
+        # set size of player
+        self.radius = 20
+        # set initial direction
+        self.direction = [1, 0]
+        # generate new player and store on canvas
         item = canvas.create_oval(x - self.radius * 0.5, y - self.radius * 1.5,
                                   x + self.radius * 0.5, y + self.radius * 1.5,
                                   fill='green')
         super(Player, self).__init__(canvas, item)
-
-    # direction is a tuple of x and y direction of movement
-    def move(self, offset, angle):
-        print('player movement ' + angle)
-        # parse direction from keyword
-        direction = self.MOTION[angle]
-        # get coordinates and window info
-        coords = self.get_position()
-        width = self.canvas.winfo_width()
-        height = self.canvas.winfo_height()
-        motion = [0, 0]
-        # calculate if x move is possible
-        if coords[0] + offset >= 0 and \
-                coords[2] + offset <= width:
-            motion[0] = offset * direction[0]
-            self.direction[0] = direction[0]
-        # calculate if y move is possible
-        if coords[1] + offset >= 0 and \
-                coords[3] + offset <= height:
-            motion[1] = offset * direction[1]
-            self.direction[1] = direction[1]
-        # move in allowed direction by offset
-        super(Player, self).move(motion[0], motion[1])
