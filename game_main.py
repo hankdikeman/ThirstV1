@@ -1,6 +1,5 @@
 import tkinter as tk
 from game import Game
-from gameobject import Player
 
 # main game function
 if __name__ == '__main__':
