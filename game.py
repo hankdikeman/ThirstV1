@@ -3,6 +3,7 @@ from gameobject import Player, Beetle, Enemy
 import secrets
 
 
+# game baseclass, inherits from tkinter frame
 class Game(tk.Frame):
     MOVE_DIR = ['left', 'right', 'up', 'down']
     NUM_ENEMIES = 10
