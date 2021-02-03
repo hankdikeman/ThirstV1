@@ -24,14 +24,14 @@ class Entity(GameObject):
         if angle == 'left':
             if l_obj - distance >= 0:
                 motion[0] = distance * x_dir
-        if angle == 'right':
+        elif angle == 'right':
             if r_obj + distance <= width:
                 motion[0] = distance * x_dir
         # calculate if up-down move is possible
-        if angle == 'up':
+        elif angle == 'up':
             if t_obj - distance >= 0:
                 motion[1] = distance * y_dir
-        if angle == 'down':
+        elif angle == 'down':
             if b_obj + distance <= height:
                 motion[1] = distance * y_dir
         # set new direction

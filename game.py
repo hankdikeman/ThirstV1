@@ -1,5 +1,5 @@
 import tkinter as tk
-from gameobject import Player, Beetle, Enemy
+from gamemobs import Player, Beetle, Enemy
 import secrets
 
 
