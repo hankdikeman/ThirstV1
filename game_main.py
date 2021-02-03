@@ -8,4 +8,6 @@ if __name__ == '__main__':
     root.title('Thirst')
     # initialize tkinter frame and begin main loop
     game = Game(root)
+    game.after(1000, game.start_game())
     game.mainloop()
+    # game.start_game()

@@ -65,14 +65,14 @@ class Enemy(Entity):
 class Beetle(Enemy):
     def __init__(self, canvas, x, y):
         # set size of player
-        self.radius = 20
+        self.radius = 10
         # set initial direction
         self.direction = [1, 0]
         # generate new player and store on canvas
         item = canvas.create_oval(x - self.radius * 1, y - self.radius * 1,
                                   x + self.radius * 1, y + self.radius * 1,
                                   fill='red')
-        super(Player, self).__init__(canvas, item)
+        super(Beetle, self).__init__(canvas, item)
 
 
 # core player-character class
