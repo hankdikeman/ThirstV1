@@ -1,3 +1,4 @@
+# game object baseclass
 class GameObject(object):
     # initialize item and place within canvas
     def __init__(self, canvas, item):
@@ -17,6 +18,7 @@ class GameObject(object):
         self.canvas.delete(self.item)
 
 
+# entity baseclass (NPC and PC)
 class Entity(GameObject):
     MOTION = {'left': [-1, 0],
               'right': [1, 0],
@@ -56,7 +58,7 @@ class Entity(GameObject):
         super(Entity, self).move(*motion)
 
 
-# generic enemy class
+# enemy baseclass
 class Enemy(Entity):
     pass
 
@@ -75,7 +77,7 @@ class Beetle(Enemy):
         super(Beetle, self).__init__(canvas, item)
 
 
-# core player-character class
+# player-character class
 class Player(Entity):
     def __init__(self, canvas, x, y):
         # set size of player

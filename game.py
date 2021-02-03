@@ -1,7 +1,6 @@
 import tkinter as tk
-from gameobject import Player, Beetle
+from gameobject import Player, Beetle, Enemy
 import secrets
-import time
 
 
 class Game(tk.Frame):
@@ -12,7 +11,6 @@ class Game(tk.Frame):
 
     def __init__(self, master):
         super(Game, self).__init__(master)
-        self.lives = 3
         self.width = 1400
         self.height = 800
         self.canvas = tk.Canvas(self, bg='#E1C699',
@@ -46,18 +44,22 @@ class Game(tk.Frame):
         self.canvas.bind('<d>',
                          lambda _: self.player.move(30, 'right'))
         print('screen initialized')
-        # self.start_game()
 
+    # game intro sequence to be
     def game_intro(self):
         pass
 
+    # start game sequence
     def start_game(self):
         self.game_intro()
         self.game_loop()
 
+    # game loop event
     def game_loop(self):
+        # iterate through entities in entity list
         for item in self.items.values():
-            print('iteration')
-            if isinstance(item, Beetle):
+            # move if instance of NPC
+            if isinstance(item, Enemy):
                 item.move(self.MOB_MOVEMENT, secrets.choice(self.MOVE_DIR))
+        # add gameloop event to event queue
         self.canvas.after(self.TIMESTEP, lambda: self.game_loop())
