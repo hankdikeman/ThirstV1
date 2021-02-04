@@ -46,8 +46,9 @@ class Game(tk.Frame):
                          lambda _: self.player.move(30, 'right'))
         print('screen initialized')
 
+    # remove item from item list after deletion
     def remove_item(self, item):
-        print('removing item ' + str(item))
+        print('removing item ' + str(self.items[item]))
         del self.items[item]
 
     # game intro sequence to be
@@ -62,10 +63,11 @@ class Game(tk.Frame):
     # game loop event
     def game_loop(self):
         # iterate through entities in entity list
-        for item in self.items.values():
+        # list is necessary because dictionary may change size during loop
+        for item in list(self.items.values()):
             # move if instance of NPC
             if isinstance(item, Enemy):
-                item.increment_health(-1)
                 item.move(self.MOB_MOVEMENT, secrets.choice(self.MOVE_DIR))
+                item.increment_health(-1)
         # add gameloop event to event queue
         self.canvas.after(self.TIMESTEP, lambda: self.game_loop())

@@ -16,5 +16,7 @@ class GameObject(object):
 
     # delete item
     def delete(self):
+        # delete off canvas
         self.canvas.delete(self.item)
+        # delete from item list in game object
         self.game.remove_item(self.item)
