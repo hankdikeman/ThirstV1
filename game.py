@@ -23,12 +23,12 @@ class Game(tk.Frame):
         self.items = {}
         # generate new player object and store
         self.player = Player(self.canvas, int(
-            self.width / 2), int(self.height / 2))
+            self.width / 2), int(self.height / 2), self)
         self.items[self.player.item] = self.player
         # generate "beetle" mob and store
         for beetle_num in range(self.NUM_ENEMIES):
             beetle = Beetle(self.canvas, int(
-                self.width / 2), int(self.height / 2))
+                self.width / 2), int(self.height / 2), self)
             self.items[beetle.item] = beetle
         # key bindings for movement
         self.canvas.focus_set()
@@ -46,6 +46,10 @@ class Game(tk.Frame):
                          lambda _: self.player.move(30, 'right'))
         print('screen initialized')
 
+    def remove_item(self, item):
+        print('removing item ' + str(item))
+        del self.items[item]
+
     # game intro sequence to be
     def game_intro(self):
         pass
@@ -61,6 +65,7 @@ class Game(tk.Frame):
         for item in self.items.values():
             # move if instance of NPC
             if isinstance(item, Enemy):
+                item.increment_health(-1)
                 item.move(self.MOB_MOVEMENT, secrets.choice(self.MOVE_DIR))
         # add gameloop event to event queue
         self.canvas.after(self.TIMESTEP, lambda: self.game_loop())

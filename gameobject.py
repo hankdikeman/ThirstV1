@@ -1,9 +1,10 @@
 # game object baseclass
 class GameObject(object):
     # initialize item and place within canvas
-    def __init__(self, canvas, item):
+    def __init__(self, canvas, item, game):
         self.canvas = canvas
         self.item = item
+        self.game = game
 
     # get position (boundaries) of item on canvas
     def get_position(self):
@@ -16,3 +17,4 @@ class GameObject(object):
     # delete item
     def delete(self):
         self.canvas.delete(self.item)
+        self.game.remove_item(self.item)
