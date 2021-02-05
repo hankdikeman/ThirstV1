@@ -53,11 +53,15 @@ class Game(tk.Frame):
 
     # game intro sequence to be
     def game_intro(self):
-        pass
+        return self.canvas.create_text(self.width / 2, self.height / 4, fill="black", font="Times 80 bold",
+                                       text="THIRST")
 
     # start game sequence
     def start_game(self):
-        self.game_intro()
+        # create intro title and schedule removal after period of time
+        intro_header = self.game_intro()
+        self.canvas.after(4000, lambda: self.canvas.delete(intro_header))
+        # run game loop
         self.game_loop()
 
     # game loop event
@@ -68,6 +72,6 @@ class Game(tk.Frame):
             # move if instance of NPC
             if isinstance(item, Enemy):
                 item.move(self.MOB_MOVEMENT, secrets.choice(self.MOVE_DIR))
-                item.increment_health(-1)
+                # item.increment_health(-1)
         # add gameloop event to event queue
         self.canvas.after(self.TIMESTEP, lambda: self.game_loop())

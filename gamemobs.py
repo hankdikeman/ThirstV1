@@ -40,7 +40,6 @@ class Entity(GameObject):
 
     # direction is a tuple of x and y direction of movement
     def move(self, distance, angle):
-        print('object movement ' + angle)
         # parse direction from keyword
         x_dir, y_dir = self.MOTION[angle]
         # get coordinates and window info

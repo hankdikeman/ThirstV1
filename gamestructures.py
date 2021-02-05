@@ -3,7 +3,8 @@ from gameobject import GameObject
 
 # game structure baseclass
 class GameStructure(GameObject):
-    pass
+    def __init__(self, canvas, item, game):
+        super(GameStructure, self).__init__(canvas, item, game)
 
 
 # oasis placeholder class
