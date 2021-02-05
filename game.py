@@ -1,5 +1,6 @@
 import tkinter as tk
 from gamemobs import Player, Beetle, Enemy
+from gamestructures import Oasis
 import secrets
 
 
@@ -30,6 +31,9 @@ class Game(tk.Frame):
             beetle = Beetle(self.canvas, int(
                 self.width / 2), int(self.height / 2), self)
             self.items[beetle.item] = beetle
+        # generate oasis structure and store
+        oasis = Oasis(self.canvas, self, self.width / 4, self.height / 4)
+        self.items[oasis.item] = oasis
         # key bindings for movement
         self.canvas.focus_set()
         # up

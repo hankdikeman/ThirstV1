@@ -98,6 +98,8 @@ class Player(Entity):
         self.radius = 20
         # set initial direction
         self.direction = [1, 0]
+        # set direction indicator
+        #** implement direction indicator here **#
         # generate new player and store on canvas
         item = canvas.create_oval(x - self.radius * 0.5, y - self.radius * 1.5,
                                   x + self.radius * 0.5, y + self.radius * 1.5,
