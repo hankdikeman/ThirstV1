@@ -15,7 +15,7 @@ class Oasis(GameStructure):
         # generate oasis object and store tag
         item = canvas.create_oval(x - self.radius * 1.5, y - self.radius * 1,
                                   x + self.radius * 1.5, y + self.radius * 1,
-                                  fill='blue')
+                                  fill='dodger blue')
         # move to lowest z level
         canvas.tag_lower(item, 'all')
         super(Oasis, self).__init__(canvas, item, game)

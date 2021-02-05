@@ -63,20 +63,25 @@ class Entity(GameObject):
                 motion[1] = distance * y_dir
         # set new direction
         self.direction = self.MOTION[angle]
-        # calculate new postion with buffer
-        new_position = [l_obj + motion[0] + 1, t_obj + motion[1] + 1,
-                        r_obj + motion[0] - 1, b_obj + motion[1] - 1]
-        print(f"\nold position: {(l_obj, t_obj, r_obj, b_obj)}")
-        print(f"new position: {new_position}")
-        print(self.canvas.find_overlapping(*new_position))
-        if not self.canvas.find_overlapping(*new_position):
-            print('moved ', angle)
+        # calculate new center of object
+        new_x, new_y = [(l_obj + r_obj) / 2, (t_obj + b_obj) / 2]
+        # calculate new position with buffer zone
+        new_position = [new_x + motion[0], new_y + motion[1],
+                        new_x + motion[0], new_y + motion[1]]
+        # check collision over new center of object
+        if not self.check_movement_collision(new_position):
             # move in allowed direction by distance
             super(Entity, self).move(*motion)
 
-    # collision checker
-    def check_movement_collision(self, motion, new_position):
-        pass
+    # collision checker, true if collision with entity and false if not
+    def check_movement_collision(self, new_position):
+        # get tuple of overlapping items
+        overlapping_items = self.canvas.find_overlapping(*new_position)
+        # determine if any of the items are entities
+        for item in overlapping_items:
+            if self.game.item_is_entity(item):
+                return True
+        return False
 
 
 # enemy baseclass
