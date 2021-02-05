@@ -63,8 +63,12 @@ class Entity(GameObject):
                 motion[1] = distance * y_dir
         # set new direction
         self.direction = self.MOTION[angle]
-        # move in allowed direction by distance
-        super(Entity, self).move(*motion)
+        # calculate new postion
+        new_position = [l_obj + motion[0], t_obj +
+                        motion[1], r_obj + motion[0], b_obj + motion[1]]
+        if self.canvas.find_overlapping(*new_position) is None:
+            # move in allowed direction by distance
+            super(Entity, self).move(*motion)
 
 
 # enemy baseclass
