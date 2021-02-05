@@ -63,12 +63,20 @@ class Entity(GameObject):
                 motion[1] = distance * y_dir
         # set new direction
         self.direction = self.MOTION[angle]
-        # calculate new postion
-        new_position = [l_obj + motion[0], t_obj +
-                        motion[1], r_obj + motion[0], b_obj + motion[1]]
-        if self.canvas.find_overlapping(*new_position) is None:
+        # calculate new postion with buffer
+        new_position = [l_obj + motion[0] + 1, t_obj + motion[1] + 1,
+                        r_obj + motion[0] - 1, b_obj + motion[1] - 1]
+        print(f"\nold position: {(l_obj, t_obj, r_obj, b_obj)}")
+        print(f"new position: {new_position}")
+        print(self.canvas.find_overlapping(*new_position))
+        if not self.canvas.find_overlapping(*new_position):
+            print('moved ', angle)
             # move in allowed direction by distance
             super(Entity, self).move(*motion)
+
+    # collision checker
+    def check_movement_collision(self, motion, new_position):
+        pass
 
 
 # enemy baseclass
@@ -99,7 +107,7 @@ class Player(Entity):
 
     def __init__(self, canvas, x, y, game):
         # set size of player
-        self.radius = 20
+        self.radius = 15
         # set initial direction
         self.direction = [1, 0]
         # set direction indicator
