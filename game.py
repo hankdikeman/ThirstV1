@@ -8,6 +8,7 @@ import secrets
 class Game(tk.Frame):
     MOVE_DIR = ['left', 'right', 'up', 'down']
     MOB_MOVEMENT = 30
+    NUM_OASES = 5
     TIMESTEP = 80
 
     def __init__(self, master):
@@ -29,10 +30,14 @@ class Game(tk.Frame):
         self.entities[self.player.item] = self.player
 
         # generate oasis structure and store
-        oasis = Oasis(self.canvas, self, self.width / 4, self.height / 4)
-        self.entities = {**self.entities, **oasis.get_enemylist()}
-
-        self.structures[oasis.item] = oasis
+        for i in range(self.NUM_OASES):
+            # generate new oasis
+            oasis = Oasis(self.canvas, self, secrets.choice(range(0, self.width)),
+                          secrets.choice(range(0, self.height)))
+            # merge oasis and game entity list
+            self.entities = {**self.entities, **oasis.get_enemylist()}
+            # store oasis in structure list
+            self.structures[oasis.item] = oasis
         # key bindings for movement
         self.canvas.focus_set()
         # up
