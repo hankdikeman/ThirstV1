@@ -1,5 +1,5 @@
 import tkinter as tk
-from gamemobs import Player, Beetle, Enemy
+from gamemobs import Player, Beetle, Enemy, Lizard
 from gamestructures import Oasis
 import secrets
 
@@ -7,12 +7,13 @@ import secrets
 # game baseclass, inherits from tkinter frame
 class Game(tk.Frame):
     MOVE_DIR = ['left', 'right', 'up', 'down']
-    NUM_ENEMIES = 10
     MOB_MOVEMENT = 30
+    NUM_OASES = 5
     TIMESTEP = 80
 
     def __init__(self, master):
         super(Game, self).__init__(master)
+        # set window width and height and create canvas object
         self.width = 1400
         self.height = 800
         self.canvas = tk.Canvas(self, bg='#E1C699',
@@ -20,21 +21,23 @@ class Game(tk.Frame):
                                 height=self.height)
         self.canvas.pack()
         self.pack()
-        # entity and structure lists
+        # entity and structure dictionaries
         self.entities = {}
         self.structures = {}
         # generate new player object and store
         self.player = Player(self.canvas, int(
             self.width / 2), int(self.height / 2), self)
         self.entities[self.player.item] = self.player
-        # generate "beetle" mob and store
-        for beetle_num in range(self.NUM_ENEMIES):
-            beetle = Beetle(self.canvas, int(
-                self.width / 2), int(self.height / 2), self)
-            self.entities[beetle.item] = beetle
+
         # generate oasis structure and store
-        oasis = Oasis(self.canvas, self, self.width / 4, self.height / 4)
-        self.structures[oasis.item] = oasis
+        for i in range(self.NUM_OASES):
+            # generate new oasis
+            oasis = Oasis(self.canvas, self, secrets.choice(range(0, self.width)),
+                          secrets.choice(range(0, self.height)))
+            # merge oasis and game entity list
+            self.entities = {**self.entities, **oasis.get_enemylist()}
+            # store oasis in structure list
+            self.structures[oasis.item] = oasis
         # key bindings for movement
         self.canvas.focus_set()
         # up
@@ -50,6 +53,7 @@ class Game(tk.Frame):
         self.canvas.bind('<d>',
                          lambda _: self.player.move(30, 'right'))
         print('screen initialized')
+        print(self.entities)
 
     # remove object method, subcontracts to *_entity or *_structure
     def remove_object(self, item):
