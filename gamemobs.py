@@ -1,4 +1,6 @@
 from gameobject import GameObject
+from mathutils import direction_weighting
+from statistics import mean
 
 
 # entity baseclass (NPC and PC)
@@ -80,7 +82,6 @@ class Entity(GameObject):
         # determine if any of the items are entities
         for item in overlapping_items:
             if self.game.item_is_entity(item):
-                print("collision")
                 return True
         return False
 
@@ -90,6 +91,15 @@ class Enemy(Entity):
     def __init__(self, canvas, item, game, oasis, max_health):
         self.oasis = oasis
         super(Enemy, self).__init__(canvas, item, game, self.MAX_HEALTH)
+
+    def get_next_move(self):
+        # get distance from home oasis
+        dist = [x - y for x, y
+                in zip(self.get_position(), self.oasis.get_position())]
+        # average x distance and y distance
+        x_dist, y_dist = (mean([dist[0], dist[2]]), mean([dist[1], dist[3]]))
+        # calculate next move and return
+        return direction_weighting(x_dist, y_dist)
 
 
 # example enemy class for beetle
