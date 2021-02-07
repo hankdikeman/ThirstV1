@@ -10,6 +10,7 @@ class Game(tk.Frame):
     MOB_MOVEMENT = 30
     NUM_OASES = 5
     TIMESTEP = 300
+    MOB_TIMESTEP = 300
 
     def __init__(self, master):
         super(Game, self).__init__(master)
@@ -98,19 +99,30 @@ class Game(tk.Frame):
 
     # game intro sequence to be
     def game_intro(self):
-        return self.canvas.create_text(self.width / 2, self.height / 4, fill="black", font="Times 80 bold",
-                                       text="THIRST")
+        intro_header = self.canvas.create_text(
+            self.width / 2,
+            self.height / 4,
+            fill="black",
+            font="Times 80 bold",
+            text="THIRST")
+        self.canvas.after(4000, lambda: self.canvas.delete(intro_header))
 
     # start game sequence
+
     def start_game(self):
         # create intro title and schedule removal after period of time
-        intro_header = self.game_intro()
-        self.canvas.after(4000, lambda: self.canvas.delete(intro_header))
+        self.game_intro()
         # run game loop
         self.game_loop()
+        self.mob_movement_loop()
 
     # game loop event
     def game_loop(self):
+        # add gameloop event to event queue
+        self.canvas.after(self.TIMESTEP, lambda: self.game_loop())
+
+    # mob movement timesteps
+    def mob_movement_loop(self):
         # iterate through entities in entity list
         # list is necessary because dictionary may change size during loop
         for item in list(self.entities.values()):
@@ -118,10 +130,5 @@ class Game(tk.Frame):
             if isinstance(item, Enemy):
                 move_direction = item.get_next_move()
                 item.move(self.MOB_MOVEMENT, move_direction)
-                # item.increment_health(-1)
-        # add gameloop event to event queue
-        self.canvas.after(self.TIMESTEP, lambda: self.game_loop())
-
-    # break down loops into separate timesteps soon
-    def mob_movement_loop(self):
-        pass
+                # item.increment_health(-1)\
+        self.canvas.after(self.MOB_TIMESTEP, lambda: self.mob_movement_loop())
