@@ -15,7 +15,7 @@ class Oasis(GameStructure):
 
     def __init__(self, canvas, game, x, y):
         # store oasis radius
-        self.x = x
+        self.x, self.y = game.nearest_grid_node(x, y)
         self.y = y
 
         # generate oasis object and store tag

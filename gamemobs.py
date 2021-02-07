@@ -118,7 +118,6 @@ class Beetle(Enemy):
     MAX_HEALTH = 50
 
     def __init__(self, canvas, x, y, game, oasis):
-        x, y = game.nearest_grid_node(x, y)
         # set size of player
         self.radius = 10
         # set initial direction
@@ -137,7 +136,6 @@ class Lizard(Enemy):
     MAX_HEALTH = 50
 
     def __init__(self, canvas, x, y, game, oasis):
-        x, y = game.nearest_grid_node(x, y)
         # set size of player
         self.radius = 10
         # set initial direction
