@@ -13,6 +13,7 @@ class Game(tk.Frame):
 
     def __init__(self, master):
         super(Game, self).__init__(master)
+        # set window width and height and create canvas object
         self.width = 1400
         self.height = 800
         self.canvas = tk.Canvas(self, bg='#E1C699',
@@ -20,7 +21,7 @@ class Game(tk.Frame):
                                 height=self.height)
         self.canvas.pack()
         self.pack()
-        # entity and structure lists
+        # entity and structure dictionaries
         self.entities = {}
         self.structures = {}
         # generate new player object and store

@@ -84,16 +84,18 @@ class Entity(GameObject):
         return False
 
 
-# enemy baseclass
+# enemy baseclass, stores reference to oasis
 class Enemy(Entity):
-    pass
+    def __init__(self, canvas, item, game, oasis, max_health):
+        self.oasis = oasis
+        super(Enemy, self).__init__(canvas, item, game, self.MAX_HEALTH)
 
 
 # example enemy class for beetle
 class Beetle(Enemy):
     MAX_HEALTH = 50
 
-    def __init__(self, canvas, x, y, game):
+    def __init__(self, canvas, x, y, game, oasis):
         # set size of player
         self.radius = 10
         # set initial direction
@@ -103,7 +105,8 @@ class Beetle(Enemy):
         item = canvas.create_oval(x - self.radius * 1, y - self.radius * 1,
                                   x + self.radius * 1, y + self.radius * 1,
                                   fill='red')
-        super(Beetle, self).__init__(canvas, item, game, self.MAX_HEALTH)
+        super(Beetle, self).__init__(
+            canvas, item, game, oasis, self.MAX_HEALTH)
 
 
 # player-character class
