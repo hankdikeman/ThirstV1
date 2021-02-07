@@ -88,6 +88,8 @@ class Entity(GameObject):
 
 # enemy baseclass, stores reference to oasis
 class Enemy(Entity):
+    agro = False
+
     def __init__(self, canvas, item, game, oasis, max_health):
         self.oasis = oasis
         super(Enemy, self).__init__(canvas, item, game, self.MAX_HEALTH)
@@ -100,6 +102,16 @@ class Enemy(Entity):
         x_dist, y_dist = (mean([dist[0], dist[2]]), mean([dist[1], dist[3]]))
         # calculate next move and return
         return direction_weighting(x_dist, y_dist)
+
+    # calculate distance between enemy and player
+    def get_distance_to_player(self, player):
+        # get positions of left, top, right, bottom
+        enemy_loc = self.get_object_xy()
+        player_loc = player.get_object_xy()
+        # calculate distance and return
+        dist = next(abs(play - enemy)
+                    for play, enemy in zip(enemy_loc, player_loc))
+        return dist
 
 
 # example enemy class for beetle

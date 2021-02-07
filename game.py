@@ -7,7 +7,7 @@ from secrets import choice
 # game baseclass, inherits from tkinter frame
 class Game(tk.Frame):
     MOVE_DIR = ['left', 'right', 'up', 'down']
-    MOB_MOVEMENT = 30
+    MOVEMENT_STEP = 30
     NUM_OASES = 5
     TIMESTEP = 300
     MOB_TIMESTEP = 300
@@ -46,16 +46,16 @@ class Game(tk.Frame):
         self.canvas.focus_set()
         # up
         self.canvas.bind('<w>',
-                         lambda _: self.player.move(self.MOB_MOVEMENT, 'up'))
+                         lambda _: self.player.move(self.MOVEMENT_STEP, 'up'))
         # left
         self.canvas.bind('<a>',
-                         lambda _: self.player.move(self.MOB_MOVEMENT, 'left'))
+                         lambda _: self.player.move(self.MOVEMENT_STEP, 'left'))
         # down
         self.canvas.bind('<s>',
-                         lambda _: self.player.move(self.MOB_MOVEMENT, 'down'))
+                         lambda _: self.player.move(self.MOVEMENT_STEP, 'down'))
         # right
         self.canvas.bind('<d>',
-                         lambda _: self.player.move(self.MOB_MOVEMENT, 'right'))
+                         lambda _: self.player.move(self.MOVEMENT_STEP, 'right'))
         print(self.entities)
 
     # remove object method, subcontracts to *_entity or *_structure
@@ -128,7 +128,10 @@ class Game(tk.Frame):
         for item in list(self.entities.values()):
             # move if instance of NPC
             if isinstance(item, Enemy):
+                # get next move direction
                 move_direction = item.get_next_move()
-                item.move(self.MOB_MOVEMENT, move_direction)
-                # item.increment_health(-1)\
+                # attempt to move in that direction
+                item.move(self.MOVEMENT_STEP, move_direction)
+                # check distance to player
+                item.get_distance_to_player(self.player)
         self.canvas.after(self.MOB_TIMESTEP, lambda: self.mob_movement_loop())
