@@ -97,6 +97,13 @@ class Game(tk.Frame):
     def item_is_entity(self, item):
         return item in self.entities.keys()
 
+    # returns grid position nearest to x and y on coordinate grid
+    def nearest_grid_node(self, x, y):
+        player_x, player_y = self.player.get_object_xy()
+        node_x = x - ((x - player_x) % self.MOVEMENT_STEP)
+        node_y = y - ((y - player_y) % self.MOVEMENT_STEP)
+        return node_x, node_y
+
     # game intro sequence to be
     def game_intro(self):
         intro_header = self.canvas.create_text(
