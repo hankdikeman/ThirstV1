@@ -108,8 +108,6 @@ class Enemy(Entity):
         # get positions of left, top, right, bottom
         enemy_loc = self.get_object_xy()
         player_loc = player.get_object_xy()
-        print(enemy_loc)
-        print(player_loc)
         # calculate distance with geometric mean and return
         return int(mean([abs(play - enemy)
                          for play, enemy in zip(enemy_loc, player_loc)]))
