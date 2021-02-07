@@ -11,16 +11,15 @@ class GameStructure(GameObject):
 # early implemented oasis class
 class Oasis(GameStructure):
     NUM_ENEMIES = 5
+    RADIUS = 40
 
     def __init__(self, canvas, game, x, y):
         # store oasis radius
-        self.radius = 40
         self.x = x
         self.y = y
 
         # generate oasis object and store tag
-        item = canvas.create_oval(x - self.radius * 1.5, y - self.radius * 1,
-                                  x + self.radius * 1.5, y + self.radius * 1,
+        item = canvas.create_oval(*Oasis.generate_oasis_boundaries(self.x, self.y),
                                   fill='dodger blue')
         # move to lowest z level
         canvas.tag_lower(item, 'all')
@@ -37,6 +36,10 @@ class Oasis(GameStructure):
 
     def get_enemylist(self):
         return self.enemy_list
+
+    @classmethod
+    def generate_oasis_boundaries(cls, x, y):
+        return [x - cls.RADIUS * 1.5, y - cls.RADIUS * 1, x + cls.RADIUS * 1.5, y + cls.RADIUS * 1]
 
 
 # baseclass for RNG objects

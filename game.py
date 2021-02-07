@@ -1,7 +1,7 @@
 import tkinter as tk
 from gamemobs import Player, Beetle, Enemy, Lizard
 from gamestructures import Oasis
-import secrets
+from secrets import choice
 
 
 # game baseclass, inherits from tkinter frame
@@ -9,7 +9,7 @@ class Game(tk.Frame):
     MOVE_DIR = ['left', 'right', 'up', 'down']
     MOB_MOVEMENT = 30
     NUM_OASES = 5
-    TIMESTEP = 80
+    TIMESTEP = 300
 
     def __init__(self, master):
         super(Game, self).__init__(master)
@@ -31,9 +31,12 @@ class Game(tk.Frame):
 
         # generate oasis structure and store
         for i in range(self.NUM_OASES):
+            # generate new randomized oasis position and check overlaps
+            new_oasis_position = self.random_canvas_position()
+            while(self.canvas.find_overlapping(*Oasis.generate_oasis_boundaries(*new_oasis_position))):
+                new_oasis_position = self.random_canvas_position()
             # generate new oasis
-            oasis = Oasis(self.canvas, self, secrets.choice(range(0, self.width)),
-                          secrets.choice(range(0, self.height)))
+            oasis = Oasis(self.canvas, self, *new_oasis_position)
             # merge oasis and game entity list
             self.entities = {**self.entities, **oasis.get_enemylist()}
             # store oasis in structure list
@@ -42,17 +45,16 @@ class Game(tk.Frame):
         self.canvas.focus_set()
         # up
         self.canvas.bind('<w>',
-                         lambda _: self.player.move(30, 'up'))
+                         lambda _: self.player.move(self.MOB_MOVEMENT, 'up'))
         # left
         self.canvas.bind('<a>',
-                         lambda _: self.player.move(30, 'left'))
+                         lambda _: self.player.move(self.MOB_MOVEMENT, 'left'))
         # down
         self.canvas.bind('<s>',
-                         lambda _: self.player.move(30, 'down'))
+                         lambda _: self.player.move(self.MOB_MOVEMENT, 'down'))
         # right
         self.canvas.bind('<d>',
-                         lambda _: self.player.move(30, 'right'))
-        print('screen initialized')
+                         lambda _: self.player.move(self.MOB_MOVEMENT, 'right'))
         print(self.entities)
 
     # remove object method, subcontracts to *_entity or *_structure
@@ -66,6 +68,9 @@ class Game(tk.Frame):
     def remove_entity(self, item):
         print('removing entity ' + str(self.entities[item]))
         del self.entities[item]
+
+    def random_canvas_position(self):
+        return [choice(range(0, self.width)), choice(range(0, self.height))]
 
     def remove_structure(self, item):
         print('removing struct ' + str(self.structures[item]))
@@ -111,7 +116,12 @@ class Game(tk.Frame):
         for item in list(self.entities.values()):
             # move if instance of NPC
             if isinstance(item, Enemy):
-                item.move(self.MOB_MOVEMENT, secrets.choice(self.MOVE_DIR))
+                move_direction = item.get_next_move()
+                item.move(self.MOB_MOVEMENT, move_direction)
                 # item.increment_health(-1)
         # add gameloop event to event queue
         self.canvas.after(self.TIMESTEP, lambda: self.game_loop())
+
+    # break down loops into separate timesteps soon
+    def mob_movement_loop(self):
+        pass
