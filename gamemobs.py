@@ -108,10 +108,11 @@ class Enemy(Entity):
         # get positions of left, top, right, bottom
         enemy_loc = self.get_object_xy()
         player_loc = player.get_object_xy()
-        # calculate distance and return
-        dist = next(abs(play - enemy)
-                    for play, enemy in zip(enemy_loc, player_loc))
-        return dist
+        print(enemy_loc)
+        print(player_loc)
+        # calculate distance with geometric mean and return
+        return int(mean([abs(play - enemy)
+                         for play, enemy in zip(enemy_loc, player_loc)]))
 
 
 # example enemy class for beetle
@@ -119,6 +120,7 @@ class Beetle(Enemy):
     MAX_HEALTH = 50
 
     def __init__(self, canvas, x, y, game, oasis):
+        x, y = game.nearest_grid_node(x, y)
         # set size of player
         self.radius = 10
         # set initial direction
@@ -137,6 +139,7 @@ class Lizard(Enemy):
     MAX_HEALTH = 50
 
     def __init__(self, canvas, x, y, game, oasis):
+        x, y = game.nearest_grid_node(x, y)
         # set size of player
         self.radius = 10
         # set initial direction
