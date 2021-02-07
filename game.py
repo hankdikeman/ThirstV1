@@ -1,5 +1,5 @@
 import tkinter as tk
-from gamemobs import Player, Beetle, Enemy
+from gamemobs import Player, Beetle, Enemy, Lizard
 from gamestructures import Oasis
 import secrets
 

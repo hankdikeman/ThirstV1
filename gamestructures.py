@@ -1,5 +1,5 @@
 from gameobject import GameObject
-from gamemobs import Enemy, Beetle
+from gamemobs import Enemy, Beetle, Lizard
 
 
 # game structure baseclass
