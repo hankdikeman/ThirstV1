@@ -7,7 +7,6 @@ import secrets
 # game baseclass, inherits from tkinter frame
 class Game(tk.Frame):
     MOVE_DIR = ['left', 'right', 'up', 'down']
-    NUM_ENEMIES = 10
     MOB_MOVEMENT = 30
     TIMESTEP = 80
 
@@ -28,13 +27,11 @@ class Game(tk.Frame):
         self.player = Player(self.canvas, int(
             self.width / 2), int(self.height / 2), self)
         self.entities[self.player.item] = self.player
-        # generate "beetle" mob and store
-        for beetle_num in range(self.NUM_ENEMIES):
-            beetle = Beetle(self.canvas, int(
-                self.width / 2), int(self.height / 2), self)
-            self.entities[beetle.item] = beetle
+
         # generate oasis structure and store
         oasis = Oasis(self.canvas, self, self.width / 4, self.height / 4)
+        self.entities = {**self.entities, **oasis.get_enemylist()}
+
         self.structures[oasis.item] = oasis
         # key bindings for movement
         self.canvas.focus_set()
@@ -51,6 +48,7 @@ class Game(tk.Frame):
         self.canvas.bind('<d>',
                          lambda _: self.player.move(30, 'right'))
         print('screen initialized')
+        print(self.entities)
 
     # remove object method, subcontracts to *_entity or *_structure
     def remove_object(self, item):
