@@ -127,6 +127,7 @@ class Enemy(Entity):
 # example enemy class for beetle
 class Beetle(Enemy):
     MAX_HEALTH = 50
+    COLOR = 'red'
 
     def __init__(self, canvas, x, y, game, oasis):
         # set size of player
@@ -137,7 +138,7 @@ class Beetle(Enemy):
         # generate new player and store on canvas
         item = canvas.create_oval(x - self.radius * 1, y - self.radius * 1,
                                   x + self.radius * 1, y + self.radius * 1,
-                                  fill='red')
+                                  fill=self.COLOR)
         super(Beetle, self).__init__(
             canvas, item, game, oasis, self.MAX_HEALTH)
 
@@ -145,6 +146,7 @@ class Beetle(Enemy):
 # additional enemy class
 class Lizard(Enemy):
     MAX_HEALTH = 50
+    COLOR = 'brown'
 
     def __init__(self, canvas, x, y, game, oasis):
         # set size of player
@@ -155,7 +157,7 @@ class Lizard(Enemy):
         # generate new player and store on canvas
         item = canvas.create_oval(x - self.radius * 1, y - self.radius * 1,
                                   x + self.radius * 1, y + self.radius * 1,
-                                  fill='brown')
+                                  fill=self.COLOR)
         super(Lizard, self).__init__(
             canvas, item, game, oasis, self.MAX_HEALTH)
 
@@ -163,6 +165,7 @@ class Lizard(Enemy):
 # player-character class
 class Player(Entity):
     MAX_HEALTH = 100
+    COLOR = 'green'
 
     def __init__(self, canvas, x, y, game):
         # set size of player
@@ -174,5 +177,5 @@ class Player(Entity):
         # generate new player and store on canvas
         item = canvas.create_oval(x - self.radius * 0.5, y - self.radius * 1.5,
                                   x + self.radius * 0.5, y + self.radius * 1.5,
-                                  fill='green')
+                                  fill=self.COLOR)
         super(Player, self).__init__(canvas, item, game, self.MAX_HEALTH)

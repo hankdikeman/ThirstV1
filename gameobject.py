@@ -1,7 +1,7 @@
 from statistics import mean
+
+
 # game object baseclass
-
-
 class GameObject(object):
     # initialize item and place within canvas
     def __init__(self, canvas, item, game):
