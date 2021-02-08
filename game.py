@@ -137,7 +137,7 @@ class Game(tk.Frame):
             # move if instance of NPC
             if isinstance(item, Enemy):
                 # get next move direction
-                move_direction = item.get_next_move()
+                move_direction = item.get_next_move(self.player)
                 # attempt to move in that direction
                 item.move(self.MOVEMENT_STEP, move_direction)
                 # check distance to player
