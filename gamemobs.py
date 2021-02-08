@@ -1,6 +1,7 @@
 from gameobject import GameObject
 from mathutils import direction_weighting
 from statistics import mean
+from math import sqrt
 
 
 # entity baseclass (NPC and PC)
@@ -88,10 +89,9 @@ class Entity(GameObject):
 
 # enemy baseclass, stores reference to oasis
 class Enemy(Entity):
-    agro = False
-
     def __init__(self, canvas, item, game, oasis, max_health):
         self.oasis = oasis
+        self.agro = False
         super(Enemy, self).__init__(canvas, item, game, self.MAX_HEALTH)
 
     def get_next_move(self):
@@ -105,12 +105,23 @@ class Enemy(Entity):
 
     # calculate distance between enemy and player
     def get_distance_to_player(self, player):
-        # get positions of left, top, right, bottom
-        enemy_loc = self.get_object_xy()
-        player_loc = player.get_object_xy()
+        # get one x position and one y position of each object
+        enemy_loc = self.get_object_xy()[0:2:1]
+        player_loc = player.get_object_xy()[0:2:1]
         # calculate distance with geometric mean and return
-        return int(mean([abs(play - enemy)
-                         for play, enemy in zip(enemy_loc, player_loc)]))
+        return sqrt(sum([(e - p)**2 for e, p in zip(enemy_loc, player_loc)]))
+
+    # use get_distance_to_player function to determine whether agro
+    def check_enemy_agro(self, player, agro_distance):
+        self.agro = (self.get_distance_to_player(player) <= agro_distance)
+        if(self.agro):
+            self.canvas.itemconfig(self.item, fill='blue')
+        else:
+            self.canvas.itemconfig(self.item, fill='red')
+
+    # return the current agro status of the enemy mob
+    def get_agro_status(self):
+        return self.agro
 
 
 # example enemy class for beetle

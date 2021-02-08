@@ -11,6 +11,7 @@ class Game(tk.Frame):
     NUM_OASES = 5
     TIMESTEP = 300
     MOB_TIMESTEP = 300
+    AGRO_DISTANCE = 150
 
     def __init__(self, master):
         super(Game, self).__init__(master)
@@ -140,5 +141,5 @@ class Game(tk.Frame):
                 # attempt to move in that direction
                 item.move(self.MOVEMENT_STEP, move_direction)
                 # check distance to player
-                item.get_distance_to_player(self.player)
+                item.check_enemy_agro(self.player, self.AGRO_DISTANCE)
         self.canvas.after(self.MOB_TIMESTEP, lambda: self.mob_movement_loop())
