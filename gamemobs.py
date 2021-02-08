@@ -1,5 +1,5 @@
 from gameobject import GameObject
-from mathutils import direction_weighting
+from mathutils import direction_weighting, move_direction_to_target
 from statistics import mean
 from math import sqrt
 
@@ -94,7 +94,22 @@ class Enemy(Entity):
         self.agro = False
         super(Enemy, self).__init__(canvas, item, game, self.MAX_HEALTH)
 
-    def get_next_move(self):
+    def get_next_move(self, player):
+        if(self.agro):
+            return self.targeting_move(player)
+        else:
+            return self.idle_move()
+
+    def targeting_move(self, player):
+        # get distance from player
+        dist = [x - y for x, y
+                in zip(self.get_position(), player.get_position())]
+        # average x distance and y distance
+        x_dist, y_dist = (mean([dist[0], dist[2]]), mean([dist[1], dist[3]]))
+        # calculate next move and return
+        return move_direction_to_target(x_dist, y_dist)
+
+    def idle_move(self):
         # get distance from home oasis
         dist = [x - y for x, y
                 in zip(self.get_position(), self.oasis.get_position())]
