@@ -89,13 +89,16 @@ class Entity(GameObject):
 
 # enemy baseclass, stores reference to oasis
 class Enemy(Entity):
+    # debug code, must be removed later
+    AGRO_ACTIVE = True
+
     def __init__(self, canvas, item, game, oasis, max_health):
         self.oasis = oasis
         self.agro = False
         super(Enemy, self).__init__(canvas, item, game, self.MAX_HEALTH)
 
     def get_next_move(self, player):
-        if(self.agro):
+        if(self.agro and self.AGRO_ACTIVE):
             return self.targeting_move(player)
         else:
             return self.idle_move()
