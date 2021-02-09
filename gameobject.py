@@ -23,6 +23,23 @@ class GameObject(object):
 
     # shift function for player movement
     def shift(self, delta, angle):
+        move = self.get_movement_vector(delta, angle)
+        self.canvas.move(self.item, *move)
+
+    def get_position_after_move(self, delta, angle):
+        position = list(self.get_object_xy())
+        # change x y coordinates by given magnitude
+        if angle == 'left':
+            position[0] += -delta
+        elif angle == 'right':
+            position[0] += delta
+        elif angle == 'up':
+            position[1] += -delta
+        elif angle == 'down':
+            position[1] += delta
+        return position
+
+    def get_movement_vector(self, delta, angle):
         move = [0, 0]
         # change x y coordinates by given magnitude
         if angle == 'left':
@@ -33,7 +50,7 @@ class GameObject(object):
             move[1] = delta
         elif angle == 'down':
             move[1] = - delta
-        self.canvas.move(self.item, *move)
+        return move
 
     # delete item
     def delete(self):

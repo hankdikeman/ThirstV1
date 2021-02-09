@@ -82,10 +82,18 @@ class Game(tk.Frame):
 
     # shifts all objects but player one step in given direction on game grid
     def shift_game(self, angle):
-        for _, item in {**self.entities, **self.structures}.items():
-            if not isinstance(item, Player):
-                print(item)
-                item.shift(self.MOVEMENT_STEP, angle)
+        # get new canvas coordinates of player after shift
+        new_position = self.player.get_position_after_move(
+            self.MOVEMENT_STEP, angle)
+        # some BS needed to convert (x,y) point to (x1, y1, x2, y2) area
+        # not useful enough to justify a dedicated function yet
+        new_position_area = [x - 1 for x in new_position] + \
+            [x + 1 for x in new_position]
+        # check to make sure no entities are overlapping new position
+        if not self.player.check_movement_collision(new_position_area):
+            for _, item in {**self.entities, **self.structures}.items():
+                if not isinstance(item, Player):
+                    item.shift(self.MOVEMENT_STEP, angle)
 
     # generic method to return pointer to game_object, less optimal
     def get_item_ptr(self, item):
@@ -151,5 +159,4 @@ class Game(tk.Frame):
                 item.move(self.MOVEMENT_STEP, move_direction)
                 # check distance to player
                 item.check_enemy_agro(self.player, self.AGRO_DISTANCE)
-                print(item.get_object_xy())
         self.canvas.after(self.MOB_TIMESTEP, lambda: self.mob_movement_loop())

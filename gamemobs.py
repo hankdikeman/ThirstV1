@@ -47,23 +47,17 @@ class Entity(GameObject):
         x_dir, y_dir = self.MOTION[angle]
         # get coordinates and window info
         l_obj, t_obj, r_obj, b_obj = self.get_position()
-        width = self.canvas.winfo_width()
-        height = self.canvas.winfo_height()
         motion = [0, 0]
         # calculate if left-right move is possible
         if angle == 'left':
-            if l_obj - distance >= 0:
-                motion[0] = distance * x_dir
+            motion[0] = distance * x_dir
         elif angle == 'right':
-            if r_obj + distance <= width:
-                motion[0] = distance * x_dir
+            motion[0] = distance * x_dir
         # calculate if up-down move is possible
         elif angle == 'up':
-            if t_obj - distance >= 0:
-                motion[1] = distance * y_dir
+            motion[1] = distance * y_dir
         elif angle == 'down':
-            if b_obj + distance <= height:
-                motion[1] = distance * y_dir
+            motion[1] = distance * y_dir
         # set new direction
         self.direction = self.MOTION[angle]
         # calculate new center of object
@@ -71,7 +65,6 @@ class Entity(GameObject):
         # calculate new position with buffer zone
         new_position = [new_x + motion[0], new_y + motion[1],
                         new_x + motion[0], new_y + motion[1]]
-        print(motion)
         # check collision over new center of object
         if not self.check_movement_collision(new_position):
             # move in allowed direction by distance
