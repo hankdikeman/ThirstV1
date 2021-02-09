@@ -47,16 +47,16 @@ class Game(tk.Frame):
         self.canvas.focus_set()
         # up
         self.canvas.bind('<w>',
-                         lambda _: self.player.move(self.MOVEMENT_STEP, 'up'))
+                         lambda _: self.shift_game('up'))
         # left
         self.canvas.bind('<a>',
-                         lambda _: self.player.move(self.MOVEMENT_STEP, 'left'))
+                         lambda _: self.shift_game('left'))
         # down
         self.canvas.bind('<s>',
-                         lambda _: self.player.move(self.MOVEMENT_STEP, 'down'))
+                         lambda _: self.shift_game('down'))
         # right
         self.canvas.bind('<d>',
-                         lambda _: self.player.move(self.MOVEMENT_STEP, 'right'))
+                         lambda _: self.shift_game('right'))
         print(self.entities)
 
     # remove object method, subcontracts to *_entity or *_structure
