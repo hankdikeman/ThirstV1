@@ -71,6 +71,7 @@ class Entity(GameObject):
         # calculate new position with buffer zone
         new_position = [new_x + motion[0], new_y + motion[1],
                         new_x + motion[0], new_y + motion[1]]
+        print(motion)
         # check collision over new center of object
         if not self.check_movement_collision(new_position):
             # move in allowed direction by distance

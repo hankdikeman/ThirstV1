@@ -23,17 +23,17 @@ class GameObject(object):
 
     # shift function for player movement
     def shift(self, delta, angle):
-        x, y = self.get_object_xy()
+        move = [0, 0]
         # change x y coordinates by given magnitude
         if angle == 'left':
-            x = x + delta
+            move[0] = delta
         elif angle == 'right':
-            x = x - delta
+            move[0] = -delta
         elif angle == 'up':
-            y = y + delta
+            move[1] = delta
         elif angle == 'down':
-            y = y - delta
-        self.canvas.move(self.item, x, y)
+            move[1] = - delta
+        self.canvas.move(self.item, *move)
 
     # delete item
     def delete(self):

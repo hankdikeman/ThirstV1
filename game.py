@@ -84,6 +84,7 @@ class Game(tk.Frame):
     def shift_game(self, angle):
         for _, item in {**self.entities, **self.structures}.items():
             if not isinstance(item, Player):
+                print(item)
                 item.shift(self.MOVEMENT_STEP, angle)
 
     # generic method to return pointer to game_object, less optimal
@@ -150,4 +151,5 @@ class Game(tk.Frame):
                 item.move(self.MOVEMENT_STEP, move_direction)
                 # check distance to player
                 item.check_enemy_agro(self.player, self.AGRO_DISTANCE)
+                print(item.get_object_xy())
         self.canvas.after(self.MOB_TIMESTEP, lambda: self.mob_movement_loop())
