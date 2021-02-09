@@ -47,16 +47,16 @@ class Game(tk.Frame):
         self.canvas.focus_set()
         # up
         self.canvas.bind('<w>',
-                         lambda _: self.player.move(self.MOVEMENT_STEP, 'up'))
+                         lambda _: self.shift_game('up'))
         # left
         self.canvas.bind('<a>',
-                         lambda _: self.player.move(self.MOVEMENT_STEP, 'left'))
+                         lambda _: self.shift_game('left'))
         # down
         self.canvas.bind('<s>',
-                         lambda _: self.player.move(self.MOVEMENT_STEP, 'down'))
+                         lambda _: self.shift_game('down'))
         # right
         self.canvas.bind('<d>',
-                         lambda _: self.player.move(self.MOVEMENT_STEP, 'right'))
+                         lambda _: self.shift_game('right'))
         print(self.entities)
 
     # remove object method, subcontracts to *_entity or *_structure
@@ -82,9 +82,18 @@ class Game(tk.Frame):
 
     # shifts all objects but player one step in given direction on game grid
     def shift_game(self, angle):
-        for _, item in {**self.entities, **self.structures}:
-            if not isinstance(item, Player):
-                item.shift(self.MOVEMENT_STEP, angle)
+        # get new canvas coordinates of player after shift
+        new_position = self.player.get_position_after_move(
+            self.MOVEMENT_STEP, angle)
+        # some BS needed to convert (x,y) point to (x1, y1, x2, y2) area
+        # not useful enough to justify a dedicated function yet
+        new_position_area = [x - 1 for x in new_position] + \
+            [x + 1 for x in new_position]
+        # check to make sure no entities are overlapping new position
+        if not self.player.check_movement_collision(new_position_area):
+            for _, item in {**self.entities, **self.structures}.items():
+                if not isinstance(item, Player):
+                    item.shift(self.MOVEMENT_STEP, angle)
 
     # generic method to return pointer to game_object, less optimal
     def get_item_ptr(self, item):
