@@ -71,12 +71,20 @@ class Game(tk.Frame):
         print('removing entity ' + str(self.entities[item]))
         del self.entities[item]
 
+    # get random canvas position (for structure generation)
     def random_canvas_position(self):
         return [choice(range(0, self.width)), choice(range(0, self.height))]
 
+    # remove a structure using
     def remove_structure(self, item):
         print('removing struct ' + str(self.structures[item]))
         del self.structures[item]
+
+    # shifts all objects but player one step in given direction on game grid
+    def shift_game(self, angle):
+        for _, item in {**self.entities, **self.structures}:
+            if not isinstance(item, Player):
+                item.shift(self.MOVEMENT_STEP, angle)
 
     # generic method to return pointer to game_object, less optimal
     def get_item_ptr(self, item):
