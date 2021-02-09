@@ -82,7 +82,7 @@ class Game(tk.Frame):
 
     # shifts all objects but player one step in given direction on game grid
     def shift_game(self, angle):
-        for _, item in {**self.entities, **self.structures}:
+        for _, item in {**self.entities, **self.structures}.items():
             if not isinstance(item, Player):
                 item.shift(self.MOVEMENT_STEP, angle)
 

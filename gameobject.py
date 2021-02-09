@@ -33,7 +33,7 @@ class GameObject(object):
             y = y + delta
         elif angle == 'down':
             y = y - delta
-        self.move(x, y)
+        self.canvas.move(self.item, x, y)
 
     # delete item
     def delete(self):
