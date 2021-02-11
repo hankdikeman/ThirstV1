@@ -115,6 +115,24 @@ class Game(tk.Frame):
     def item_is_entity(self, item):
         return item in self.entities.keys()
 
+    # checks whether item is a structure
+    def item_is_structure(self, item):
+        return item in self.structures.keys()
+
+    # checks whether item is an enemy
+    def item_is_enemy(self, item):
+        if item in self.entities.keys():
+            return isinstance(self.entities[item], Enemy)
+        else:
+            return False
+
+    # checks whether item is the player
+    def item_is_enemy(self, item):
+        if item in self.entities.keys():
+            return isinstance(self.entities[item], Player)
+        else:
+            return False
+
     # returns grid position nearest to x and y on coordinate grid
     def nearest_grid_node(self, x, y):
         player_x, player_y = self.player.get_object_xy()
@@ -159,6 +177,7 @@ class Game(tk.Frame):
                 item.move(self.MOVEMENT_STEP, move_direction)
                 # check distance to player
                 if(item.check_enemy_agro(self.player, self.AGRO_DISTANCE)):
+                    print('agro worked')
                     item.try_attack(self.player)
 
         self.canvas.after(self.MOB_TIMESTEP, lambda: self.mob_movement_loop())
