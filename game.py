@@ -1,6 +1,7 @@
 import tkinter as tk
 from gamemobs import Player, Beetle, Enemy, Lizard
 from gamestructures import Oasis
+from mathutils import coords_to_area
 from secrets import choice
 
 
@@ -87,8 +88,7 @@ class Game(tk.Frame):
             self.MOVEMENT_STEP, angle)
         # some BS needed to convert (x,y) point to (x1, y1, x2, y2) area
         # not useful enough to justify a dedicated function yet
-        new_position_area = [x - 1 for x in new_position] + \
-            [x + 1 for x in new_position]
+        new_position_area = coords_to_area(new_position)
         # check to make sure no entities are overlapping new position
         if not self.player.check_movement_collision(new_position_area):
             for _, item in {**self.entities, **self.structures}.items():

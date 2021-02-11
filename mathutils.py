@@ -14,6 +14,11 @@ def direction_weighting(x, y):
     return direction
 
 
+# take in an xy coordinate and spit out area grid for collision analysis
+def coords_to_area(xy_coords):
+    return [x - 1 for x in xy_coords] + [x + 1 for x in xy_coords]
+
+
 # determine the next move for an entity targeting a location (deterministic)
 def move_direction_to_target(x, y):
     weights = [fun(x, y, TARGETING_BUFFER)

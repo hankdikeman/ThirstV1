@@ -89,6 +89,7 @@ class Enemy(Entity):
     def __init__(self, canvas, item, game, oasis, max_health):
         self.oasis = oasis
         self.agro = False
+        self.direction = [0, 0]
         super(Enemy, self).__init__(canvas, item, game, self.MAX_HEALTH)
 
     def get_next_move(self, player):
@@ -135,7 +136,8 @@ class Enemy(Entity):
             self.canvas.itemconfig(self.item, fill='red')
             return False
 
-    def try_attack()
+    def try_attack(self, player):
+        pass
 
     # return the current agro status of the enemy mob
     def get_agro_status(self):
