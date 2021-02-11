@@ -127,7 +127,7 @@ class Game(tk.Frame):
             return False
 
     # checks whether item is the player
-    def item_is_enemy(self, item):
+    def item_is_player(self, item):
         if item in self.entities.keys():
             return isinstance(self.entities[item], Player)
         else:
@@ -177,7 +177,7 @@ class Game(tk.Frame):
                 item.move(self.MOVEMENT_STEP, move_direction)
                 # check distance to player
                 if(item.check_enemy_agro(self.player, self.AGRO_DISTANCE)):
-                    print('agro worked')
-                    item.try_attack(self.player)
+                    # print('agro worked')
+                    item.attack_player(self.player)
 
         self.canvas.after(self.MOB_TIMESTEP, lambda: self.mob_movement_loop())

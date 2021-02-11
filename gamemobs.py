@@ -61,8 +61,6 @@ class Entity(GameObject):
             motion[1] = distance * y_dir
         elif angle == 'down':
             motion[1] = distance * y_dir
-        # set new direction
-        self.direction = self.MOTION[angle]
         # calculate new center of object
         new_x, new_y = [(l_obj + r_obj) / 2, (t_obj + b_obj) / 2]
         # calculate new position with buffer zone
@@ -139,22 +137,27 @@ class Enemy(Entity):
             self.canvas.itemconfig(self.item, fill='red')
             return False
 
-    def try_attack(self, player):
-        print('try attack fired')
+    def attack_player(self, player):
+        # print('try attack fired')
+        print('\n\nplayer pos:', player.get_object_xy())
+        print('enemy pos,angle:', self.get_object_xy(), ' ', self.direction)
         # get current position
         attack_coord = self.get_position_after_move(
             self.game.MOVEMENT_STEP, self.direction)
         # get overlapping area for collision detection
         collision_box = coords_to_area(attack_coord)
+        print('col box:', collision_box)
         # check if player is overlapping one tile over
         attacked_entities = self.canvas.find_overlapping(*collision_box)
+        print('overlap ent:', attacked_entities)
         # loop through bordering entities and attack if player
-        # determine if any of the items are entities
         for item in attacked_entities:
-            print('checked attacking:', item)
-            print('is entity:', isinstance(item, Entity))
-            if isinstance(item, Player) and self.ATTACK_ACTIVE:
-                print('attacked')
+            if self.game.item_is_player(item) and self.ATTACK_ACTIVE:
+                print('ATTACKED')
+                player.increment_health(self.ATTACK_POWER)
+                print(player.get_current_health())
+            else:
+                print('DIDNT ATTACK')
 
     # return the current agro status of the enemy mob
     def get_agro_status(self):
@@ -164,13 +167,12 @@ class Enemy(Entity):
 # example enemy class for beetle
 class Beetle(Enemy):
     MAX_HEALTH = 50
+    ATTACK_POWER = -1
     COLOR = 'red'
 
     def __init__(self, canvas, x, y, game, oasis):
         # set size of player
         self.radius = 10
-        # set initial direction
-        self.direction = [1, 0]
         # set max health
         # generate new player and store on canvas
         item = canvas.create_oval(x - self.radius * 1, y - self.radius * 1,
@@ -183,13 +185,12 @@ class Beetle(Enemy):
 # additional enemy class
 class Lizard(Enemy):
     MAX_HEALTH = 50
+    ATTACK_POWER = -10
     COLOR = 'brown'
 
     def __init__(self, canvas, x, y, game, oasis):
         # set size of player
         self.radius = 10
-        # set initial direction
-        self.direction = [1, 0]
         # set max health
         # generate new player and store on canvas
         item = canvas.create_oval(x - self.radius * 1, y - self.radius * 1,
@@ -202,6 +203,7 @@ class Lizard(Enemy):
 # player-character class
 class Player(Entity):
     MAX_HEALTH = 100
+    ATTACK_POWER = -50
     COLOR = 'green'
 
     def __init__(self, canvas, x, y, game):
