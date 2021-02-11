@@ -138,26 +138,18 @@ class Enemy(Entity):
             return False
 
     def attack_player(self, player):
-        # print('try attack fired')
-        print('\n\nplayer pos:', player.get_object_xy())
-        print('enemy pos,angle:', self.get_object_xy(), ' ', self.direction)
         # get current position
         attack_coord = self.get_position_after_move(
             self.game.MOVEMENT_STEP, self.direction)
         # get overlapping area for collision detection
         collision_box = coords_to_area(attack_coord)
-        print('col box:', collision_box)
         # check if player is overlapping one tile over
         attacked_entities = self.canvas.find_overlapping(*collision_box)
-        print('overlap ent:', attacked_entities)
         # loop through bordering entities and attack if player
         for item in attacked_entities:
             if self.game.item_is_player(item) and self.ATTACK_ACTIVE:
-                print('ATTACKED')
                 player.increment_health(self.ATTACK_POWER)
                 print(player.get_current_health())
-            else:
-                print('DIDNT ATTACK')
 
     # return the current agro status of the enemy mob
     def get_agro_status(self):
