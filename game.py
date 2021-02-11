@@ -58,6 +58,8 @@ class Game(tk.Frame):
         # right
         self.canvas.bind('<d>',
                          lambda _: self.shift_game('right'))
+        self.canvas.bind('<space>',
+                         lambda _: self.player.attack_enemy())
         print(self.entities)
 
     # remove object method, subcontracts to *_entity or *_structure
@@ -83,6 +85,8 @@ class Game(tk.Frame):
 
     # shifts all objects but player one step in given direction on game grid
     def shift_game(self, angle):
+        # set new player direction
+        self.player.set_direction(angle)
         # get new canvas coordinates of player after shift
         new_position = self.player.get_position_after_move(
             self.MOVEMENT_STEP, angle)

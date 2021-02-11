@@ -149,7 +149,7 @@ class Enemy(Entity):
         for item in attacked_entities:
             if self.game.item_is_player(item) and self.ATTACK_ACTIVE:
                 player.increment_health(self.ATTACK_POWER)
-                print(player.get_current_health())
+                print('player health: ', player.get_current_health())
 
     # return the current agro status of the enemy mob
     def get_agro_status(self):
@@ -165,7 +165,6 @@ class Beetle(Enemy):
     def __init__(self, canvas, x, y, game, oasis):
         # set size of player
         self.radius = 10
-        # set max health
         # generate new player and store on canvas
         item = canvas.create_oval(x - self.radius * 1, y - self.radius * 1,
                                   x + self.radius * 1, y + self.radius * 1,
@@ -183,7 +182,6 @@ class Lizard(Enemy):
     def __init__(self, canvas, x, y, game, oasis):
         # set size of player
         self.radius = 10
-        # set max health
         # generate new player and store on canvas
         item = canvas.create_oval(x - self.radius * 1, y - self.radius * 1,
                                   x + self.radius * 1, y + self.radius * 1,
@@ -196,15 +194,32 @@ class Lizard(Enemy):
 class Player(Entity):
     MAX_HEALTH = 100
     ATTACK_POWER = -50
+    ATTACK_ACTIVE = True
     COLOR = 'green'
 
     def __init__(self, canvas, x, y, game):
         # set size of player
         self.radius = 15
-        # set direction indicator
         #** implement direction indicator here **#
         # generate new player and store on canvas
         item = canvas.create_oval(x - self.radius * 0.5, y - self.radius * 1.5,
                                   x + self.radius * 0.5, y + self.radius * 1.5,
                                   fill=self.COLOR)
         super(Player, self).__init__(canvas, item, game, self.MAX_HEALTH)
+
+    def attack_enemy(self):
+        # get current position
+        attack_coord = self.get_position_after_move(
+            self.game.MOVEMENT_STEP, self.direction)
+        # get overlapping area for collision detection
+        collision_box = coords_to_area(attack_coord)
+        # check if player is overlapping one tile over
+        attacked_entities = self.canvas.find_overlapping(*collision_box)
+        # loop through bordering entities and attack if player
+        for item in attacked_entities:
+            if self.game.item_is_enemy(item) and self.ATTACK_ACTIVE:
+                targeted_enemy = self.game.get_entity_ptr(item)
+                targeted_enemy.increment_health(self.ATTACK_POWER)
+
+    def set_direction(self, new_direction):
+        self.direction = new_direction
