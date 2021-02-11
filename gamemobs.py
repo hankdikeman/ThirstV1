@@ -104,7 +104,8 @@ class Enemy(Entity):
         # average x distance and y distance
         x_dist, y_dist = (mean([dist[0], dist[2]]), mean([dist[1], dist[3]]))
         # calculate next move and return
-        return move_direction_to_target(x_dist, y_dist)
+        new_direction = move_direction_to_target(x_dist, y_dist)
+        return new_direction
 
     def idle_move(self):
         # get distance from home oasis
@@ -113,7 +114,8 @@ class Enemy(Entity):
         # average x distance and y distance
         x_dist, y_dist = (mean([dist[0], dist[2]]), mean([dist[1], dist[3]]))
         # calculate next move and return
-        return direction_weighting(x_dist, y_dist)
+        new_direction = direction_weighting(x_dist, y_dist)
+        return new_direction
 
     # calculate distance between enemy and player
     def get_distance_to_player(self, player):
@@ -128,8 +130,12 @@ class Enemy(Entity):
         self.agro = (self.get_distance_to_player(player) <= agro_distance)
         if(self.agro):
             self.canvas.itemconfig(self.item, fill='blue')
+            return True
         else:
             self.canvas.itemconfig(self.item, fill='red')
+            return False
+
+    def try_attack()
 
     # return the current agro status of the enemy mob
     def get_agro_status(self):

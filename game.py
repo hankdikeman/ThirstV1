@@ -158,5 +158,7 @@ class Game(tk.Frame):
                 # attempt to move in that direction
                 item.move(self.MOVEMENT_STEP, move_direction)
                 # check distance to player
-                item.check_enemy_agro(self.player, self.AGRO_DISTANCE)
+                if(item.check_enemy_agro(self.player, self.AGRO_DISTANCE)):
+                    item.try_attack(self.player)
+
         self.canvas.after(self.MOB_TIMESTEP, lambda: self.mob_movement_loop())
