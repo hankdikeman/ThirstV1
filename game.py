@@ -58,6 +58,8 @@ class Game(tk.Frame):
         # right
         self.canvas.bind('<d>',
                          lambda _: self.shift_game('right'))
+        self.canvas.bind('<space>',
+                         lambda _: self.player.attack_enemy())
         print(self.entities)
 
     # remove object method, subcontracts to *_entity or *_structure
@@ -83,6 +85,8 @@ class Game(tk.Frame):
 
     # shifts all objects but player one step in given direction on game grid
     def shift_game(self, angle):
+        # set new player direction
+        self.player.set_direction(angle)
         # get new canvas coordinates of player after shift
         new_position = self.player.get_position_after_move(
             self.MOVEMENT_STEP, angle)
@@ -114,6 +118,24 @@ class Game(tk.Frame):
     # returns true if item is an entity
     def item_is_entity(self, item):
         return item in self.entities.keys()
+
+    # checks whether item is a structure
+    def item_is_structure(self, item):
+        return item in self.structures.keys()
+
+    # checks whether item is an enemy
+    def item_is_enemy(self, item):
+        if item in self.entities.keys():
+            return isinstance(self.entities[item], Enemy)
+        else:
+            return False
+
+    # checks whether item is the player
+    def item_is_player(self, item):
+        if item in self.entities.keys():
+            return isinstance(self.entities[item], Player)
+        else:
+            return False
 
     # returns grid position nearest to x and y on coordinate grid
     def nearest_grid_node(self, x, y):
@@ -159,6 +181,7 @@ class Game(tk.Frame):
                 item.move(self.MOVEMENT_STEP, move_direction)
                 # check distance to player
                 if(item.check_enemy_agro(self.player, self.AGRO_DISTANCE)):
-                    item.try_attack(self.player)
+                    # print('agro worked')
+                    item.attack_player(self.player)
 
         self.canvas.after(self.MOB_TIMESTEP, lambda: self.mob_movement_loop())

@@ -1,5 +1,5 @@
 from gameobject import GameObject
-from mathutils import direction_weighting, move_direction_to_target
+from mathutils import direction_weighting, move_direction_to_target, coords_to_area
 from statistics import mean
 from math import sqrt
 
@@ -15,6 +15,7 @@ class Entity(GameObject):
     def __init__(self, canvas, item, game, max_health):
         self.max_health = max_health
         self.health = max_health
+        self.direction = 'left'
         super(Entity, self).__init__(canvas, item, game)
 
     # getter function for health
@@ -45,21 +46,21 @@ class Entity(GameObject):
     def move(self, distance, angle):
         # parse direction from keyword
         x_dir, y_dir = self.MOTION[angle]
+        # set new direction in Entity class
+        self.direction = angle
         # get coordinates and window info
         l_obj, t_obj, r_obj, b_obj = self.get_position()
         motion = [0, 0]
-        # calculate if left-right move is possible
+        # calculate left right move
         if angle == 'left':
             motion[0] = distance * x_dir
         elif angle == 'right':
             motion[0] = distance * x_dir
-        # calculate if up-down move is possible
+        # calculate up down move
         elif angle == 'up':
             motion[1] = distance * y_dir
         elif angle == 'down':
             motion[1] = distance * y_dir
-        # set new direction
-        self.direction = self.MOTION[angle]
         # calculate new center of object
         new_x, new_y = [(l_obj + r_obj) / 2, (t_obj + b_obj) / 2]
         # calculate new position with buffer zone
@@ -85,11 +86,11 @@ class Entity(GameObject):
 class Enemy(Entity):
     # debug code, must be removed later
     AGRO_ACTIVE = True
+    ATTACK_ACTIVE = True
 
     def __init__(self, canvas, item, game, oasis, max_health):
         self.oasis = oasis
         self.agro = False
-        self.direction = [0, 0]
         super(Enemy, self).__init__(canvas, item, game, self.MAX_HEALTH)
 
     def get_next_move(self, player):
@@ -136,8 +137,19 @@ class Enemy(Entity):
             self.canvas.itemconfig(self.item, fill='red')
             return False
 
-    def try_attack(self, player):
-        pass
+    def attack_player(self, player):
+        # get current position
+        attack_coord = self.get_position_after_move(
+            self.game.MOVEMENT_STEP, self.direction)
+        # get overlapping area for collision detection
+        collision_box = coords_to_area(attack_coord)
+        # check if player is overlapping one tile over
+        attacked_entities = self.canvas.find_overlapping(*collision_box)
+        # loop through bordering entities and attack if player
+        for item in attacked_entities:
+            if self.game.item_is_player(item) and self.ATTACK_ACTIVE:
+                player.increment_health(self.ATTACK_POWER)
+                print('player health: ', player.get_current_health())
 
     # return the current agro status of the enemy mob
     def get_agro_status(self):
@@ -147,14 +159,12 @@ class Enemy(Entity):
 # example enemy class for beetle
 class Beetle(Enemy):
     MAX_HEALTH = 50
+    ATTACK_POWER = -1
     COLOR = 'red'
 
     def __init__(self, canvas, x, y, game, oasis):
         # set size of player
         self.radius = 10
-        # set initial direction
-        self.direction = [1, 0]
-        # set max health
         # generate new player and store on canvas
         item = canvas.create_oval(x - self.radius * 1, y - self.radius * 1,
                                   x + self.radius * 1, y + self.radius * 1,
@@ -166,14 +176,12 @@ class Beetle(Enemy):
 # additional enemy class
 class Lizard(Enemy):
     MAX_HEALTH = 50
+    ATTACK_POWER = -10
     COLOR = 'brown'
 
     def __init__(self, canvas, x, y, game, oasis):
         # set size of player
         self.radius = 10
-        # set initial direction
-        self.direction = [1, 0]
-        # set max health
         # generate new player and store on canvas
         item = canvas.create_oval(x - self.radius * 1, y - self.radius * 1,
                                   x + self.radius * 1, y + self.radius * 1,
@@ -185,17 +193,33 @@ class Lizard(Enemy):
 # player-character class
 class Player(Entity):
     MAX_HEALTH = 100
+    ATTACK_POWER = -50
+    ATTACK_ACTIVE = True
     COLOR = 'green'
 
     def __init__(self, canvas, x, y, game):
         # set size of player
         self.radius = 15
-        # set initial direction
-        self.direction = [1, 0]
-        # set direction indicator
         #** implement direction indicator here **#
         # generate new player and store on canvas
         item = canvas.create_oval(x - self.radius * 0.5, y - self.radius * 1.5,
                                   x + self.radius * 0.5, y + self.radius * 1.5,
                                   fill=self.COLOR)
         super(Player, self).__init__(canvas, item, game, self.MAX_HEALTH)
+
+    def attack_enemy(self):
+        # get current position
+        attack_coord = self.get_position_after_move(
+            self.game.MOVEMENT_STEP, self.direction)
+        # get overlapping area for collision detection
+        collision_box = coords_to_area(attack_coord)
+        # check if player is overlapping one tile over
+        attacked_entities = self.canvas.find_overlapping(*collision_box)
+        # loop through bordering entities and attack if player
+        for item in attacked_entities:
+            if self.game.item_is_enemy(item) and self.ATTACK_ACTIVE:
+                targeted_enemy = self.game.get_entity_ptr(item)
+                targeted_enemy.increment_health(self.ATTACK_POWER)
+
+    def set_direction(self, new_direction):
+        self.direction = new_direction
