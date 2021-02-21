@@ -1,4 +1,6 @@
 from gameobject import GameObject
+import pygame
+from os import path
 from mathutils import direction_weighting, move_direction_to_target, coords_to_area
 from statistics import mean
 from math import sqrt
@@ -91,6 +93,11 @@ class Enemy(Entity):
     def __init__(self, canvas, item, game, oasis, max_health):
         self.oasis = oasis
         self.agro = False
+        pygame.mixer.init()
+        self.ATTACK_SOUND = pygame.mixer.Sound(
+            path.join('fx', 'enemy_killed.wav'))
+        self.DEATH_SOUND = pygame.mixer.Sound(
+            path.join('fx', 'enemy_killed.wav'))
         super(Enemy, self).__init__(canvas, item, game, self.MAX_HEALTH)
 
     def get_next_move(self, player):
@@ -149,6 +156,7 @@ class Enemy(Entity):
         for item in attacked_entities:
             if self.game.item_is_player(item) and self.ATTACK_ACTIVE:
                 player.increment_health(self.ATTACK_POWER)
+                pygame.mixer.Sound.play(self.ATTACK_SOUND)
                 print('player health: ', player.get_current_health())
 
     # return the current agro status of the enemy mob

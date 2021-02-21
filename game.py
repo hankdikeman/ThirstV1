@@ -77,7 +77,17 @@ class Game(tk.Frame):
         self.canvas.bind('p', lambda _: self.pause_game())
 
     def pause_game(self):
-        self.PAUSED = not self.PAUSED
+        if not self.PAUSED:
+            self.PAUSED = not self.PAUSED
+            self.PAUSED_MSG = self.canvas.create_text(
+                self.width / 2,
+                self.height / 2,
+                fill="black",
+                font="Times 100 bold",
+                text="GAME PAUSED")
+        else:
+            self.canvas.delete(self.PAUSED_MSG)
+            self.PAUSED = not self.PAUSED
 
     # get random canvas position (for structure generation)
     def random_canvas_position(self):
