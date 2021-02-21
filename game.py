@@ -78,6 +78,7 @@ class Game(tk.Frame):
 
     def pause_game(self):
         if not self.PAUSED:
+            pygame.mixer.music.set_volume(0.3)
             self.PAUSED = not self.PAUSED
             self.PAUSED_MSG = self.canvas.create_text(
                 self.width / 2,
@@ -86,6 +87,7 @@ class Game(tk.Frame):
                 font="Times 100 bold",
                 text="GAME PAUSED")
         else:
+            pygame.mixer.music.set_volume(1.0)
             self.canvas.delete(self.PAUSED_MSG)
             self.PAUSED = not self.PAUSED
 
