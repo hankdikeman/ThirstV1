@@ -23,7 +23,7 @@ class Game(tk.Frame):
         # define sound mixer
         pygame.mixer.init()
         # play background music
-        music = pygame.mixer.music.load(self.BACKGROUND_MUSIC)
+        pygame.mixer.music.load(self.BACKGROUND_MUSIC)
         pygame.mixer.music.play(-1)
         # set window width and height and create canvas object
         self.width = 1400
